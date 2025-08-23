@@ -324,7 +324,26 @@ export default {
   components: {
     VueUploadMultipleImage,
   },
-  methods: {
+  methods:{
+    getCityAndState(addressComponents) {
+  let city= null;
+  let state= null;
+
+  addressComponents.forEach(component => {
+    if (component.types.includes("locality")) {
+      city = component.long_name;
+      console.log('city',city);
+    }
+    if (component.types.includes("administrative_area_level_1")) {
+      state = component.long_name;
+      console.log('state',state);
+    }
+    console.log();
+  });
+
+  return { city, state };
+},
+
     getCenter() {
       this.loading = true;
 
@@ -451,6 +470,9 @@ export default {
       this.form.address = addressData.formatted_address;
       this.form.lat = addressData.geometry.location.lat();
       this.form.lng = addressData.geometry.location.lng();
+      const {city,state}=this.getCityAndState(addressData.address_components);
+      this.form.city=city;
+      this.form.state=state;
     },
     async createLocation() {
       try {
