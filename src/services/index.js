@@ -31,3 +31,4 @@ export * from "./permission.service";
 export * from "./paymentgateway.service";
 export * from "./map.service";
 export * from "./busschedule.service";
+export * from "./operator.service";

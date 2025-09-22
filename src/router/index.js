@@ -774,6 +774,64 @@ const routes = [
           forbiddenRedirect: "/403",
         },
       },
+      {
+        path: "operators",
+        name: "operator",
+        component: () => import("../views/admin/operators"),
+        meta: {
+          requiresAuth: true,
+          authorize: ["admin", "staff"],
+          permission: ["master.admin", "operator.view"],
+          redirect: { name: "login" },
+          forbiddenRedirect: "/403",
+        },
+      },
+      {
+        path: "operator/create",
+        name: "operatorcreate",
+        component: () => import("../views/admin/operators/create"),
+        meta: {
+          requiresAuth: true,
+          authorize: ["admin", "staff"],
+          permission: ["master.admin", "operator.create"],
+          redirect: { name: "login" },
+          forbiddenRedirect: "/403",
+        },
+      },
+      {
+        path: "operator/:id",
+        name: "operatoredit",
+        component: () => import("../views/admin/operators/edit"),
+        meta: {
+          requiresAuth: true,
+          authorize: ["admin", "staff"],
+          permission: ["master.admin", "operator.edit"],
+          redirect: { name: "login" },
+          forbiddenRedirect: "/403",
+        },
+      },
+      {
+        path: "operator/dashboard",
+        name: "operator-dashboard",
+        component: () => import("../views/operator/dashboard"),
+        meta: {
+          requiresAuth: true,
+          authorize: ["operator"],
+          redirect: { name: "operator-login" },
+          forbiddenRedirect: "/403",
+        },
+      },
+      {
+        path: "operator/profile",
+        name: "operator-profile",
+        component: () => import("../views/operator/profile"),
+        meta: {
+          requiresAuth: true,
+          authorize: ["operator"],
+          redirect: { name: "operator-login" },
+          forbiddenRedirect: "/403",
+        },
+      },
     ],
   },
 
@@ -838,6 +896,22 @@ const routes = [
         path: "/privacy-policy",
         name: "policy",
         component: policy,
+        meta: {
+          requiresAuth: false,
+        },
+      },
+      {
+        path: "/auth/operator-login",
+        name: "operator-login",
+        component: () => import("../views/auth/operator-login"),
+        meta: {
+          requiresAuth: false,
+        },
+      },
+      {
+        path: "/auth/operator-reset-password/:resetToken",
+        name: "operator-reset-password",
+        component: () => import("../views/auth/operator-reset-password"),
         meta: {
           requiresAuth: false,
         },

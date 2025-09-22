@@ -168,8 +168,8 @@ export default {
       this.loadItems();
     },
     loadItems() {
-        this.queryParams.userId = this.$route.params.userId;
-       referralService.getSingle(this.queryParams).then((response) => {
+      this.queryParams.userId = this.$route.params.userId;
+      referralService.getSingle(this.queryParams).then((response) => {
         this.total_rows = response.totalRecords;
         this.rows = response.referrals;
         this.showLoader = false;
@@ -230,5 +230,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

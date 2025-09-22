@@ -1,4 +1,5 @@
-<template>  <div>
+<template>
+  <div>
     <section class="tables">
       <div class="row">
         <Breadcrumb :breadcrumbs="breadcrumbs" />
@@ -11,7 +12,8 @@
         </div>
       </div>
     </section>
-  </div></template>
+  </div>
+</template>
 
 <script>
 import Breadcrumb from "../../components/breadcrumb";
@@ -38,5 +40,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

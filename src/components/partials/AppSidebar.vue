@@ -230,6 +230,31 @@
             </ul>
           </b-collapse>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" v-b-toggle="'manage-operators'">
+            <i class="menu-icon typcn typcn-bus"></i>
+            <span class="menu-title">Manage Operators</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <b-collapse id="manage-operators">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item">
+                <router-link class="nav-link" :to="{ path: '/operators' }"
+                  >All Operators</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/operator/create',
+                  }"
+                  >Create Operator</router-link
+                >
+              </li>
+            </ul>
+          </b-collapse>
+        </li>
         <!--   <li class="nav-item">
           <a class="nav-link" v-b-toggle="'manage-agents'">
             <i class="menu-icon typcn typcn-group-outline"></i>

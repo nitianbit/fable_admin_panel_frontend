@@ -1,8 +1,6 @@
 <template lang="html">
   <section class="dashboard">
-
-      <count-to />
-
+    <count-to />
   </section>
 </template>
 
