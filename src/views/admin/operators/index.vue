@@ -51,7 +51,7 @@
                     : 'text-danger'
                 "
                 :options="statusOptions"
-                @change="updateStatus(props.row.status, props.row.ids)"
+                @change="updateStatus(props.row.status, props.row._id)"
               ></b-form-select>
             </template>
 
@@ -81,20 +81,20 @@
                       <i class="mdi mdi-eye"></i> View
                     </span>
                   </b-dropdown-item>
-                  <b-dropdown-item :href="'#/operator/' + props.row.ids">
+                  <b-dropdown-item :href="'#/operator/' + props.row._id">
                     <span class="text-primary">
                       <i class="mdi mdi-pencil"></i> Edit
                     </span>
                   </b-dropdown-item>
                   <b-dropdown-item
                     v-if="!props.row.isVerified"
-                    @click="verifyOperator(props.row.ids)"
+                    @click="verifyOperator(props.row._id)"
                   >
                     <span class="text-success">
                       <i class="mdi mdi-check-circle"></i> Verify
                     </span>
                   </b-dropdown-item>
-                  <b-dropdown-item @click.stop="deleteRow(props.row.ids)">
+                  <b-dropdown-item @click.stop="deleteRow(props.row._id)">
                     <span class="text-danger">
                       <i class="mdi mdi-delete"></i> Delete
                     </span>

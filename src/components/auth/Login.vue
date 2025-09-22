@@ -52,6 +52,12 @@
         >
           Forgot Password ?</router-link
         >
+        <router-link
+          :to="{ name: 'operator-login' }"
+          class="text-small text-primary"
+        >
+          <i class="mdi mdi-bus"></i> Operator Login
+        </router-link>
       </div>
     </b-form>
     <!-- <form method="POST">
