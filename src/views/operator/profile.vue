@@ -1,282 +1,353 @@
 <template>
-  <div>
-    <section class="forms">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="page-header">
-            <div class="page-header-title">
-              <h4 class="m-b-10">Operator Profile</h4>
-            </div>
-            <ul class="breadcrumb-title">
-              <li class="breadcrumb-item">
-                <a href="#/operator/dashboard">
-                  <i class="feather icon-home"></i>
-                </a>
-              </li>
-              <li class="breadcrumb-item">
-                <a href="#!">Profile</a>
-              </li>
-            </ul>
+  <div class="operator-profile">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h5>Profile Settings</h5>
+            <p class="text-muted">Update your operator profile information</p>
           </div>
-        </div>
-        <div class="col-lg-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Update Profile</h4>
-              <form @submit.prevent="handleSubmit" class="forms-sample">
-                <div class="row">
-                  <!-- Contact Information -->
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="phone"
-                        >Phone <span class="text-danger">*</span></label
-                      >
-                      <input
-                        type="tel"
-                        class="form-control"
-                        id="phone"
-                        v-model="form.phone"
-                        placeholder="Enter phone number"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="alternatePhone">Alternate Phone</label>
-                      <input
-                        type="tel"
-                        class="form-control"
-                        id="alternatePhone"
-                        v-model="form.alternatePhone"
-                        placeholder="Enter alternate phone number"
-                      />
-                    </div>
+          <div class="card-body">
+            <form @submit.prevent="handleSubmit" v-if="!loading">
+              <div class="row">
+                <!-- Company Information -->
+                <div class="col-md-6">
+                  <h6 class="section-title">Company Information</h6>
+                  
+                  <div class="form-group">
+                    <label>Company Name *</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="form.companyName"
+                      readonly
+                      disabled
+                    />
+                    <small class="form-text text-muted">Company name cannot be changed</small>
                   </div>
 
-                  <!-- Address Information -->
-                  <div class="col-12">
-                    <h5 class="mb-3">Address Information</h5>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="street">Street</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="street"
-                        v-model="form.address.street"
-                        placeholder="Enter street address"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="city">City</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="city"
-                        v-model="form.address.city"
-                        placeholder="Enter city"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="state">State</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="state"
-                        v-model="form.address.state"
-                        placeholder="Enter state"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="pincode">Pincode</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="pincode"
-                        v-model="form.address.pincode"
-                        placeholder="Enter pincode"
-                      />
-                    </div>
+                  <div class="form-group">
+                    <label>Company Code *</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="form.companyCode"
+                      readonly
+                      disabled
+                    />
+                    <small class="form-text text-muted">Company code cannot be changed</small>
                   </div>
 
-                  <!-- Contact Person -->
-                  <div class="col-12">
-                    <h5 class="mb-3">Contact Person</h5>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="contactPersonName"
-                        >Contact Person Name
-                        <span class="text-danger">*</span></label
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="contactPersonName"
-                        v-model="form.contactPerson.name"
-                        placeholder="Enter contact person name"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="contactPersonDesignation">Designation</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="contactPersonDesignation"
-                        v-model="form.contactPerson.designation"
-                        placeholder="Enter designation"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="contactPersonPhone"
-                        >Contact Person Phone
-                        <span class="text-danger">*</span></label
-                      >
-                      <input
-                        type="tel"
-                        class="form-control"
-                        id="contactPersonPhone"
-                        v-model="form.contactPerson.phone"
-                        placeholder="Enter contact person phone"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="contactPersonEmail"
-                        >Contact Person Email
-                        <span class="text-danger">*</span></label
-                      >
-                      <input
-                        type="email"
-                        class="form-control"
-                        id="contactPersonEmail"
-                        v-model="form.contactPerson.email"
-                        placeholder="Enter contact person email"
-                        required
-                      />
-                    </div>
+                  <div class="form-group">
+                    <label>Business Type *</label>
+                    <select class="form-control" v-model="form.businessType" disabled>
+                      <option value="Private">Private</option>
+                      <option value="Government">Government</option>
+                      <option value="Semi-Government">Semi-Government</option>
+                      <option value="Cooperative">Cooperative</option>
+                    </select>
+                    <small class="form-text text-muted">Business type cannot be changed</small>
                   </div>
 
-                  <!-- Additional Information -->
-                  <div class="col-12">
-                    <h5 class="mb-3">Additional Information</h5>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="description">Description</label>
-                      <textarea
-                        class="form-control"
-                        id="description"
-                        v-model="form.description"
-                        rows="3"
-                        placeholder="Enter description"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="website">Website</label>
-                      <input
-                        type="url"
-                        class="form-control"
-                        id="website"
-                        v-model="form.website"
-                        placeholder="https://example.com"
-                      />
-                    </div>
-                  </div>
-
-                  <!-- Social Media -->
-                  <div class="col-12">
-                    <h5 class="mb-3">Social Media</h5>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="facebook">Facebook</label>
-                      <input
-                        type="url"
-                        class="form-control"
-                        id="facebook"
-                        v-model="form.socialMedia.facebook"
-                        placeholder="https://facebook.com/yourpage"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="twitter">Twitter</label>
-                      <input
-                        type="url"
-                        class="form-control"
-                        id="twitter"
-                        v-model="form.socialMedia.twitter"
-                        placeholder="https://twitter.com/yourhandle"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="instagram">Instagram</label>
-                      <input
-                        type="url"
-                        class="form-control"
-                        id="instagram"
-                        v-model="form.socialMedia.instagram"
-                        placeholder="https://instagram.com/yourhandle"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="linkedin">LinkedIn</label>
-                      <input
-                        type="url"
-                        class="form-control"
-                        id="linkedin"
-                        v-model="form.socialMedia.linkedin"
-                        placeholder="https://linkedin.com/company/yourcompany"
-                      />
-                    </div>
+                  <div class="form-group">
+                    <label>Email *</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      v-model="form.email"
+                      readonly
+                      disabled
+                    />
+                    <small class="form-text text-muted">Email cannot be changed</small>
                   </div>
                 </div>
 
-                <div class="form-group text-center">
-                  <button
-                    type="submit"
-                    class="btn btn-primary mr-2"
-                    :disabled="loading"
-                  >
-                    <span
-                      v-if="loading"
-                      class="spinner-border spinner-border-sm mr-2"
-                    ></span>
-                    {{ loading ? "Updating..." : "Update Profile" }}
-                  </button>
-                  <router-link to="/operator/dashboard" class="btn btn-light">
-                    Cancel
-                  </router-link>
+                <!-- Contact Information -->
+                <div class="col-md-6">
+                  <h6 class="section-title">Contact Information</h6>
+                  
+                  <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input
+                      type="tel"
+                      class="form-control"
+                      v-model="form.phone"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Alternate Phone</label>
+                    <input
+                      type="tel"
+                      class="form-control"
+                      v-model="form.alternatePhone"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Country Code</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="form.countryCode"
+                      readonly
+                      disabled
+                    />
+                  </div>
                 </div>
-              </form>
+              </div>
+
+              <div class="row">
+                <!-- Address Information -->
+                <div class="col-md-6">
+                  <h6 class="section-title">Address Information</h6>
+                  
+                  <div class="form-group">
+                    <label>Street Address</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="form.address.street"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>City</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="form.address.city"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>State</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="form.address.state"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Pincode</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="form.address.pincode"
+                    />
+                  </div>
+                </div>
+
+                <!-- Contact Person Information -->
+                <div class="col-md-6">
+                  <h6 class="section-title">Contact Person Information</h6>
+                  
+                  <div class="form-group">
+                    <label>Contact Person Name *</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="form.contactPerson.name"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Designation</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="form.contactPerson.designation"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Contact Person Phone *</label>
+                    <input
+                      type="tel"
+                      class="form-control"
+                      v-model="form.contactPerson.phone"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Contact Person Email *</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      v-model="form.contactPerson.email"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <!-- Fleet and Business Settings -->
+                <div class="col-md-6">
+                  <h6 class="section-title">Fleet and Business Settings</h6>
+                  
+                  <div class="form-group">
+                    <label>Max Number of Seats *</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      v-model.number="form.maxNoOfSeats"
+                      min="1"
+                      max="100"
+                      required
+                    />
+                    <small class="form-text text-muted">Maximum number of seats per bus (1-100)</small>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Max Fleet Size</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      v-model.number="form.maxFleetSize"
+                      min="1"
+                    />
+                    <small class="form-text text-muted">Maximum number of buses in fleet</small>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Commission Rate (%)</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      v-model.number="form.commissionRate"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                    />
+                    <small class="form-text text-muted">Commission rate (0-100)</small>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Payment Terms</label>
+                    <select class="form-control" v-model="form.paymentTerms">
+                      <option value="Daily">Daily</option>
+                      <option value="Weekly">Weekly</option>
+                      <option value="Monthly">Monthly</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="col-md-6">
+                  <h6 class="section-title">Additional Information</h6>
+                  
+                  <div class="form-group">
+                    <label>Description</label>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      v-model="form.description"
+                      placeholder="Brief description about your company"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Website</label>
+                    <input
+                      type="url"
+                      class="form-control"
+                      v-model="form.website"
+                      placeholder="https://yourwebsite.com"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <!-- Social Media -->
+                <div class="col-md-6">
+                  <h6 class="section-title">Social Media</h6>
+                  
+                  <div class="form-group">
+                    <label>Facebook</label>
+                    <input
+                      type="url"
+                      class="form-control"
+                      v-model="form.socialMedia.facebook"
+                      placeholder="https://facebook.com/yourpage"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Twitter</label>
+                    <input
+                      type="url"
+                      class="form-control"
+                      v-model="form.socialMedia.twitter"
+                      placeholder="https://twitter.com/yourhandle"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Instagram</label>
+                    <input
+                      type="url"
+                      class="form-control"
+                      v-model="form.socialMedia.instagram"
+                      placeholder="https://instagram.com/yourhandle"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>LinkedIn</label>
+                    <input
+                      type="url"
+                      class="form-control"
+                      v-model="form.socialMedia.linkedin"
+                      placeholder="https://linkedin.com/company/yourcompany"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-actions">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      :disabled="submitting"
+                    >
+                      <span
+                        v-if="submitting"
+                        class="spinner-border spinner-border-sm mr-2"
+                      ></span>
+                      {{ submitting ? "Updating..." : "Update Profile" }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary ml-2"
+                      @click="resetForm"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <!-- Loading State -->
+            <div v-if="loading" class="text-center py-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <p class="mt-3">Loading profile...</p>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
@@ -287,15 +358,23 @@ export default {
   name: "operatorProfile",
   data() {
     return {
-      loading: false,
+      loading: true,
+      submitting: false,
+      operatorId: null,
       form: {
+        companyName: "",
+        companyCode: "",
+        businessType: "",
+        email: "",
         phone: "",
         alternatePhone: "",
+        countryCode: "91",
         address: {
           street: "",
           city: "",
           state: "",
           pincode: "",
+          country: "India",
         },
         contactPerson: {
           name: "",
@@ -311,7 +390,12 @@ export default {
           instagram: "",
           linkedin: "",
         },
+        maxNoOfSeats: 50,
+        maxFleetSize: 100,
+        commissionRate: 0,
+        paymentTerms: "Weekly",
       },
+      originalForm: {},
     };
   },
   async mounted() {
@@ -320,43 +404,50 @@ export default {
   methods: {
     async fetchProfile() {
       try {
+        this.loading = true;
         const response = await operatorService.getProfile();
-
-        if (response.status && response.data) {
-          const profile = response.data;
-
-          // Populate form with profile data (only allowed fields)
+        
+        if (response && response.data) {
+          // Store operator ID for update requests
+          this.operatorId = response.data._id || response.data.id || null;
+          
           this.form = {
-            phone: profile.phone || "",
-            alternatePhone: profile.alternatePhone || "",
+            companyName: response.data.companyName || "",
+            companyCode: response.data.companyCode || "",
+            businessType: response.data.businessType || "",
+            email: response.data.email || "",
+            phone: response.data.phone || "",
+            alternatePhone: response.data.alternatePhone || "",
+            countryCode: response.data.countryCode || "91",
             address: {
-              street: profile.address?.street || "",
-              city: profile.address?.city || "",
-              state: profile.address?.state || "",
-              pincode: profile.address?.pincode || "",
+              street: response.data.address?.street || "",
+              city: response.data.address?.city || "",
+              state: response.data.address?.state || "",
+              pincode: response.data.address?.pincode || "",
+              country: response.data.address?.country || "India",
             },
             contactPerson: {
-              name: profile.contactPerson?.name || "",
-              designation: profile.contactPerson?.designation || "",
-              phone: profile.contactPerson?.phone || "",
-              email: profile.contactPerson?.email || "",
+              name: response.data.contactPerson?.name || "",
+              designation: response.data.contactPerson?.designation || "",
+              phone: response.data.contactPerson?.phone || "",
+              email: response.data.contactPerson?.email || "",
             },
-            description: profile.description || "",
-            website: profile.website || "",
+            description: response.data.description || "",
+            website: response.data.website || "",
             socialMedia: {
-              facebook: profile.socialMedia?.facebook || "",
-              twitter: profile.socialMedia?.twitter || "",
-              instagram: profile.socialMedia?.instagram || "",
-              linkedin: profile.socialMedia?.linkedin || "",
+              facebook: response.data.socialMedia?.facebook || "",
+              twitter: response.data.socialMedia?.twitter || "",
+              instagram: response.data.socialMedia?.instagram || "",
+              linkedin: response.data.socialMedia?.linkedin || "",
             },
+            maxNoOfSeats: response.data.maxNoOfSeats || 50,
+            maxFleetSize: response.data.maxFleetSize || 100,
+            commissionRate: response.data.commissionRate || 0,
+            paymentTerms: response.data.paymentTerms || "Weekly",
           };
-        } else {
-          this.$toast.open({
-            message: "Failed to fetch profile data",
-            type: "error",
-            position: "top-right",
-            duration: 3000,
-          });
+          
+          // Store original form for reset functionality
+          this.originalForm = JSON.parse(JSON.stringify(this.form));
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
@@ -366,24 +457,46 @@ export default {
           position: "top-right",
           duration: 3000,
         });
+      } finally {
+        this.loading = false;
       }
     },
     async handleSubmit() {
-      this.loading = true;
       try {
-        const response = await operatorService.updateProfile(this.form);
-
-        if (response.status) {
+        this.submitting = true;
+        
+        // Prepare data for API - include all updatable fields
+        const updateData = {
+          phone: this.form.phone,
+          alternatePhone: this.form.alternatePhone,
+          address: this.form.address,
+          contactPerson: this.form.contactPerson,
+          description: this.form.description,
+          website: this.form.website,
+          socialMedia: this.form.socialMedia,
+          maxNoOfSeats: this.form.maxNoOfSeats,
+          maxFleetSize: this.form.maxFleetSize,
+          commissionRate: this.form.commissionRate,
+          paymentTerms: this.form.paymentTerms,
+        };
+        
+        // Use operator ID if available to call PATCH /v1/operator/:operatorId
+        // Otherwise fall back to profile endpoint
+        const response = await operatorService.updateProfile(updateData, this.operatorId);
+        
+        if (response && response.status) {
           this.$toast.open({
-            message: response.message,
+            message: response.message || "Profile updated successfully",
             type: "success",
             position: "top-right",
             duration: 3000,
           });
-          this.$router.push("/operator/dashboard");
+          
+          // Update original form
+          this.originalForm = JSON.parse(JSON.stringify(this.form));
         } else {
           this.$toast.open({
-            message: response.message || "Failed to update profile",
+            message: response?.message || "Failed to update profile",
             type: "error",
             position: "top-right",
             duration: 3000,
@@ -398,37 +511,94 @@ export default {
           duration: 3000,
         });
       } finally {
-        this.loading = false;
+        this.submitting = false;
       }
+    },
+    resetForm() {
+      this.form = JSON.parse(JSON.stringify(this.originalForm));
     },
   },
 };
 </script>
 
 <style scoped>
-.forms {
+.operator-profile {
   padding: 20px;
 }
 
-.page-header {
-  margin-bottom: 30px;
+.section-title {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #3498db;
 }
 
-.page-header-title h4 {
-  margin-bottom: 10px;
-  color: #333;
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 5px;
 }
 
 .form-control {
-  height: 40px !important;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  padding: 12px 15px;
+  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
-textarea.form-control {
-  height: auto !important;
+.form-control:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
 }
 
-.text-danger {
-  color: #dc3545 !important;
+.form-control:disabled {
+  background-color: #f8f9fa;
+  color: #6c757d;
+}
+
+.form-text {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.form-actions {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn {
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+  border-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #5a6268;
 }
 
 .spinner-border-sm {
@@ -438,35 +608,32 @@ textarea.form-control {
 
 .card {
   border: none;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.card-title {
-  color: #333;
-  margin-bottom: 20px;
+.card-header {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border-radius: 15px 15px 0 0;
+  padding: 20px;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 30px;
-  font-weight: 500;
+.card-header h5 {
+  margin: 0;
+  font-weight: 600;
 }
 
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+.card-body {
+  padding: 30px;
 }
 
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.text-center {
+  text-align: center;
 }
 
-.btn-light {
-  border-radius: 8px;
-  padding: 10px 30px;
+.py-5 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 </style>

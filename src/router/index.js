@@ -811,26 +811,24 @@ const routes = [
         },
       },
       {
-        path: "operator/dashboard",
-        name: "operator-dashboard",
-        component: () => import("../views/operator/dashboard"),
+        path: "operator",
+        component: () => import("../views/operator/OperatorLayout"),
         meta: {
           requiresAuth: true,
           authorize: ["operator"],
           redirect: { name: "operator-login" },
           forbiddenRedirect: "/403",
         },
-      },
-      {
-        path: "operator/profile",
-        name: "operator-profile",
-        component: () => import("../views/operator/profile"),
-        meta: {
-          requiresAuth: true,
-          authorize: ["operator"],
-          redirect: { name: "operator-login" },
-          forbiddenRedirect: "/403",
-        },
+        children: [
+          {
+            path: "dashboard",
+            name: "operator-dashboard",
+            component: () => import("../views/operator/dashboard"),
+            meta: {
+              title: "Console",
+            },
+          },
+        ],
       },
     ],
   },
@@ -930,25 +928,58 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
   const auth = useAuth();
   const isAuthenticated = auth.isAuth;
+  const userType = localStorage.getItem("userType");
   const userAccess = checkPermission(to.meta.permission);
-  //console.log(" to.fullPath ", isAuthenticated, "to.meta.requiresAuth", to);
-  let exceptionalRoutes = ["login", "forget", "change", "policy", "term"];
+  // console.log("Router guard - to:", to.path, "isAuthenticated:", isAuthenticated, "userType:", userType, "requiresAuth:", to.meta.requiresAuth);
+  let exceptionalRoutes = ["login", "forget", "change", "policy", "term", "operator-login"];
 
+  // Check if user is authenticated
   if (!isAuthenticated && to.meta.requiresAuth) {
     // console.log(" to.fullPath 111", isAuthenticated);
     return next("/auth/login"); //next("/auth/login");
   } else {
     if (exceptionalRoutes.includes(to.name)) {
       next();
+      return;
     }
   }
-  if (to.meta.permission && isAuthenticated && !userAccess) {
-    //  console.log(" to.fullPath ", to.meta.permission);
+
+  // Handle operator routes - operators don't need complex permissions
+  if (userType === "operator" && to.meta.authorize && to.meta.authorize.includes("operator")) {
+    // console.log("Operator route access granted");
+    next();
+    return;
+  }
+
+  // Prevent operators from accessing admin/staff routes
+  if (userType === "operator" && to.meta.authorize && !to.meta.authorize.includes("operator")) {
+    // console.log("Operator trying to access admin route, redirecting to operator dashboard");
+    return next({ name: "operator-dashboard" });
+  }
+  
+  // Handle admin/staff routes - only check permissions for non-operator routes
+  if (userType !== "operator" && to.meta.permission && isAuthenticated && !userAccess) {
+    // console.log("Permission denied for admin/staff route");
     return next("/403");
   }
+
+  // Redirect authenticated users away from login pages
   if (isAuthenticated && to.path === "/auth/login") {
-    return { name: from.fullPath };
+    return next({ name: "dashboard" });
   }
+  if (isAuthenticated && to.path === "/auth/operator-login") {
+    return next({ name: "operator-dashboard" });
+  }
+  
+  // Handle root path redirect based on user type
+  if (isAuthenticated && to.path === "/") {
+    if (userType === "operator") {
+      return next({ name: "operator-dashboard" });
+    } else {
+      return next({ name: "dashboard" });
+    }
+  }
+  
   //  if (isAuthenticated && to.path === "/register") return { name: from.fullPath}
   next();
 });
@@ -1018,3 +1049,4 @@ router.afterEach(() => {
 // });
 
 export default router;
+

@@ -134,11 +134,18 @@ async function getProfile() {
   }
 }
 
-async function updateProfile(profileData) {
+async function updateProfile(profileData, operatorId = null) {
   try {
     const privateAuth = useAuthApi();
-    const response = await privateAuth.patch("operators/profile", profileData);
-    return response.data;
+    // If operatorId is provided, use the ID-based endpoint (PATCH /v1/operator/:operatorId)
+    // Otherwise, use the profile endpoint (singular: operator/profile)
+    if (operatorId) {
+      const response = await privateAuth.patch(`operators/profile`, profileData);
+      return response.data;
+    } else {
+      const response = await privateAuth.patch("operators/profile", profileData);
+      return response.data;
+    }
   } catch (e) {
     return e.response;
   }

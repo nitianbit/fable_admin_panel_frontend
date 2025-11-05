@@ -102,6 +102,7 @@
 <script>
 import { operatorService } from "../../services";
 import TokenService from "../../services/token.service";
+import { useAuth } from "../../store/useAuth";
 
 export default {
   name: "operatorLogin",
@@ -142,6 +143,13 @@ export default {
             "operatorData",
             JSON.stringify(response.operator)
           );
+
+          // Update Pinia store for authentication state
+          const auth = useAuth();
+          auth.authToken = response.token;
+          auth.isAuth = true;
+          auth.getRolePermissions = []; // Operators don't need complex permissions
+          auth.general = { userType: "operator" };
 
           this.$toast.open({
             message: response.message || "Login successful",

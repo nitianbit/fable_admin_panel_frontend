@@ -71,7 +71,7 @@ Vue.use(pinia);
 
 Vue.use(VueRouter);
 
-//Vue.prototype.$appName = "Go smart shuttle";
+Vue.prototype.$appName = "FableBus";
 Vue.prototype.$year = new Date().getFullYear();
 
 Vue.config.productionTip = true;
