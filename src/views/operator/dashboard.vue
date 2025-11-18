@@ -7,385 +7,410 @@
           <div class="card-header">
             <h5>Welcome, {{ operatorData?.companyName || "Operator" }}</h5>
           </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-8">
-                  <p class="text-muted">
-                    Manage your bus operations, view statistics, and access all
-                    operator features from this dashboard.
-                  </p>
-                </div>
-                <div class="col-md-4 text-right">
-                  <div class="operator-status">
-                    <span
-                      class="badge"
-                      :class="getStatusClass(operatorData?.status)"
-                    >
-                      {{ operatorData?.status || "Unknown" }}
-                    </span>
-                    <span
-                      class="badge ml-2"
-                      :class="
-                        operatorData?.isVerified
-                          ? 'badge-success'
-                          : 'badge-warning'
-                      "
-                    >
-                      {{
-                        operatorData?.isVerified
-                          ? "Verified"
-                          : "Pending Verification"
-                      }}
-                    </span>
-                  </div>
-                </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-8">
+                <p class="text-muted">
+                  Manage your bus operations, view statistics, and access all
+                  operator features from this dashboard.
+                </p>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Statistics Cards -->
-      <div class="row">
-        <div class="col-lg-3 col-md-6">
-          <div class="card stat-card">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h6 class="text-muted f-w-600">Total Buses</h6>
-                  <h4 class="m-b-0">{{ dashboardStats?.totalBuses || 0 }}</h4>
-                </div>
-                <div class="col-auto">
-                  <i class="feather icon-bus text-c-blue f-18"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div class="card stat-card">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h6 class="text-muted f-w-600">Active Buses</h6>
-                  <h4 class="m-b-0">{{ dashboardStats?.activeBuses || 0 }}</h4>
-                </div>
-                <div class="col-auto">
-                  <i class="feather icon-check-circle text-c-green f-18"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div class="card stat-card">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h6 class="text-muted f-w-600">Fleet Size</h6>
-                  <h4 class="m-b-0">
-                    {{ dashboardStats?.fleetSize || 0 }}/{{
-                      dashboardStats?.maxFleetSize || 0
-                    }}
-                  </h4>
-                </div>
-                <div class="col-auto">
-                  <i class="feather icon-layers text-c-yellow f-18"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div class="card stat-card">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h6 class="text-muted f-w-600">Max Seats</h6>
-                  <h4 class="m-b-0">{{ dashboardStats?.maxNoOfSeats || 0 }}</h4>
-                </div>
-                <div class="col-auto">
-                  <i class="feather icon-users text-c-red f-18"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Fleet and Business Settings -->
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="card settings-card">
-            <div class="card-header settings-header">
-              <div class="d-flex align-items-center">
-                <i class="feather icon-settings settings-icon"></i>
-                <div>
-                  <h5 class="mb-0">Fleet and Business Settings</h5>
-                  <p class="text-muted mb-0 small">Update your fleet configuration and business parameters</p>
-                </div>
-              </div>
-            </div>
-            <div class="card-body settings-body">
-              <div v-if="loading && !operatorId" class="text-center py-5">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="sr-only">Loading...</span>
-                </div>
-                <p class="mt-3 text-muted">Loading settings...</p>
-              </div>
-              <form @submit.prevent="handleSettingsUpdate" v-else>
-                <div class="row">
-                  <div class="col-md-3 col-sm-6">
-                    <div class="form-group">
-                      <label class="form-label">
-                        <i class="feather icon-users text-primary mr-1"></i>
-                        Max Number of Seats *
-                      </label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        v-model.number="settingsForm.maxNoOfSeats"
-                        min="1"
-                        max="100"
-                        required
-                        placeholder="Enter max seats"
-                      />
-                      <small class="form-text text-muted">Maximum seats per bus (1-100)</small>
-                    </div>
-                  </div>
-                  <div class="col-md-3 col-sm-6">
-                    <div class="form-group">
-                      <label class="form-label">
-                        <i class="feather icon-layers text-warning mr-1"></i>
-                        Max Fleet Size
-                      </label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        v-model.number="settingsForm.maxFleetSize"
-                        min="1"
-                        placeholder="Enter fleet size"
-                      />
-                      <small class="form-text text-muted">Maximum buses in fleet</small>
-                    </div>
-                  </div>
-                  <div class="col-md-3 col-sm-6">
-                    <div class="form-group">
-                      <label class="form-label">
-                        <i class="feather icon-percent text-success mr-1"></i>
-                        Commission Rate (%)
-                      </label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        v-model.number="settingsForm.commissionRate"
-                        min="0"
-                        max="100"
-                        step="0.01"
-                        placeholder="Enter rate"
-                      />
-                      <small class="form-text text-muted">Commission rate (0-100)</small>
-                    </div>
-                  </div>
-                  <div class="col-md-3 col-sm-6">
-                    <div class="form-group">
-                      <label class="form-label">
-                        <i class="feather icon-calendar text-info mr-1"></i>
-                        Payment Terms
-                      </label>
-                      <select class="form-control" v-model="settingsForm.paymentTerms">
-                        <option value="Daily">Daily</option>
-                        <option value="Weekly">Weekly</option>
-                        <option value="Monthly">Monthly</option>
-                      </select>
-                      <small class="form-text text-muted">Payment frequency</small>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-3">
-                  <div class="col-12">
-                    <div class="form-actions">
-                      <button
-                        type="submit"
-                        class="btn btn-primary btn-lg"
-                        :disabled="submitting"
-                      >
-                        <i v-if="!submitting" class="feather icon-check-circle mr-2"></i>
-                        <span
-                          v-if="submitting"
-                          class="spinner-border spinner-border-sm mr-2"
-                        ></span>
-                        {{ submitting ? "Updating..." : "Update Settings" }}
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary btn-lg ml-2"
-                        @click="resetSettingsForm"
-                        :disabled="submitting"
-                      >
-                        <i class="feather icon-refresh-ccw mr-2"></i>
-                        Reset
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Business Information -->
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-header">
-              <h5>Business Information</h5>
-            </div>
-            <div class="card-body">
-              <div class="row mb-3">
-                <div class="col-sm-4">
-                  <strong>Company Code:</strong>
-                </div>
-                <div class="col-sm-8">
-                  <span class="badge badge-info">{{
-                    operatorData?.companyCode || "N/A"
-                  }}</span>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-sm-4">
-                  <strong>Business Type:</strong>
-                </div>
-                <div class="col-sm-8">
-                  {{ operatorData?.businessType || "N/A" }}
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-sm-4">
-                  <strong>Commission Rate:</strong>
-                </div>
-                <div class="col-sm-8">
-                  {{ dashboardStats?.commissionRate || operatorData?.commissionRate || settingsForm.commissionRate || 0 }}%
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-sm-4">
-                  <strong>Payment Terms:</strong>
-                </div>
-                <div class="col-sm-8">
-                  {{ dashboardStats?.paymentTerms || operatorData?.paymentTerms || settingsForm.paymentTerms || "N/A" }}
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-sm-4">
-                  <strong>License Expiry:</strong>
-                </div>
-                <div class="col-sm-8">
+              <div class="col-md-4 text-right">
+                <div class="operator-status">
                   <span
+                    class="badge"
+                    :class="getStatusClass(operatorData?.status)"
+                  >
+                    {{ operatorData?.status || "Unknown" }}
+                  </span>
+                  <span
+                    class="badge ml-2"
                     :class="
-                      getLicenseExpiryClass(operatorData?.licenseExpiryDate)
+                      operatorData?.isVerified
+                        ? 'badge-success'
+                        : 'badge-warning'
                     "
                   >
-                    {{ formatDate(operatorData?.licenseExpiryDate) }}
+                    {{
+                      operatorData?.isVerified
+                        ? "Verified"
+                        : "Pending Verification"
+                    }}
                   </span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-header">
-              <h5>Contact Information</h5>
-            </div>
-            <div class="card-body">
-              <div class="row mb-3">
-                <div class="col-sm-4">
-                  <strong>Email:</strong>
-                </div>
-                <div class="col-sm-8">
-                  <a :href="'mailto:' + operatorData?.email">{{
-                    operatorData?.email || "N/A"
-                  }}</a>
-                </div>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row">
+      <div class="col-lg-3 col-md-6">
+        <div class="card stat-card">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col">
+                <h6 class="text-muted f-w-600">Total Buses</h6>
+                <h4 class="m-b-0">{{ dashboardStats?.totalBuses || 0 }}</h4>
               </div>
-              <div class="row mb-3">
-                <div class="col-sm-4">
-                  <strong>Phone:</strong>
-                </div>
-                <div class="col-sm-8">
-                  <a :href="'tel:' + operatorData?.phone">
-                    {{ operatorData?.countryCode || "+91" }}
-                    {{ operatorData?.phone || "N/A" }}
-                  </a>
-                </div>
-              </div>
-              <div class="row mb-3" v-if="operatorData?.alternatePhone">
-                <div class="col-sm-4">
-                  <strong>Alternate Phone:</strong>
-                </div>
-                <div class="col-sm-8">
-                  <a :href="'tel:' + operatorData?.alternatePhone">
-                    {{ operatorData?.countryCode || "+91" }}
-                    {{ operatorData?.alternatePhone }}
-                  </a>
-                </div>
-              </div>
-              <div class="row mb-3" v-if="operatorData?.website">
-                <div class="col-sm-4">
-                  <strong>Website:</strong>
-                </div>
-                <div class="col-sm-8">
-                  <a :href="operatorData?.website" target="_blank">{{
-                    operatorData?.website
-                  }}</a>
-                </div>
-              </div>
-              <div class="row mb-3" v-if="operatorData?.contactPerson">
-                <div class="col-sm-4">
-                  <strong>Contact Person:</strong>
-                </div>
-                <div class="col-sm-8">
-                  {{ operatorData?.contactPerson?.name || "N/A" }}
-                </div>
+              <div class="col-auto">
+                <i class="feather icon-bus text-c-blue f-18"></i>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-
-      <!-- Recent Activity -->
-      <div class="row" v-if="recentActivity && recentActivity.length > 0">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-header">
-              <h5>Recent Activity</h5>
+      <div class="col-lg-3 col-md-6">
+        <div class="card stat-card">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col">
+                <h6 class="text-muted f-w-600">Active Buses</h6>
+                <h4 class="m-b-0">{{ dashboardStats?.activeBuses || 0 }}</h4>
+              </div>
+              <div class="col-auto">
+                <i class="feather icon-check-circle text-c-green f-18"></i>
+              </div>
             </div>
-            <div class="card-body">
-              <div class="activity-timeline">
-                <div
-                  v-for="(activity, index) in recentActivity"
-                  :key="index"
-                  class="activity-item"
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="card stat-card">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col">
+                <h6 class="text-muted f-w-600">Fleet Size</h6>
+                <h4 class="m-b-0">
+                  {{ dashboardStats?.fleetSize || 0 }}/{{
+                    dashboardStats?.maxFleetSize || 0
+                  }}
+                </h4>
+              </div>
+              <div class="col-auto">
+                <i class="feather icon-layers text-c-yellow f-18"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="card stat-card">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col">
+                <h6 class="text-muted f-w-600">Max Seats</h6>
+                <h4 class="m-b-0">{{ dashboardStats?.maxNoOfSeats || 0 }}</h4>
+              </div>
+              <div class="col-auto">
+                <i class="feather icon-users text-c-red f-18"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fleet and Business Settings -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card settings-card">
+          <div class="card-header settings-header">
+            <div class="d-flex align-items-center">
+              <i class="feather icon-settings settings-icon"></i>
+              <div>
+                <h5 class="mb-0">Fleet and Business Settings</h5>
+                <p class="text-muted mb-0 small">
+                  Update your fleet configuration and business parameters
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="card-body settings-body">
+            <div v-if="loading && !operatorId" class="text-center py-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <p class="mt-3 text-muted">Loading settings...</p>
+            </div>
+            <form @submit.prevent="handleSettingsUpdate" v-else>
+              <div class="row">
+                <div class="col-md-3 col-sm-6">
+                  <div class="form-group">
+                    <label class="form-label">
+                      <i class="feather icon-users text-primary mr-1"></i>
+                      Max Number of Seats *
+                    </label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      v-model.number="settingsForm.maxNoOfSeats"
+                      min="1"
+                      max="100"
+                      required
+                      placeholder="Enter max seats"
+                    />
+                    <small class="form-text text-muted"
+                      >Maximum seats per bus (1-100)</small
+                    >
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                  <div class="form-group">
+                    <label class="form-label">
+                      <i class="feather icon-layers text-warning mr-1"></i>
+                      Max Fleet Size
+                    </label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      v-model.number="settingsForm.maxFleetSize"
+                      min="1"
+                      placeholder="Enter fleet size"
+                    />
+                    <small class="form-text text-muted"
+                      >Maximum buses in fleet</small
+                    >
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                  <div class="form-group">
+                    <label class="form-label">
+                      <i class="feather icon-percent text-success mr-1"></i>
+                      Commission Rate (%)
+                    </label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      v-model.number="settingsForm.commissionRate"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                      placeholder="Enter rate"
+                    />
+                    <small class="form-text text-muted"
+                      >Commission rate (0-100)</small
+                    >
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                  <div class="form-group">
+                    <label class="form-label">
+                      <i class="feather icon-calendar text-info mr-1"></i>
+                      Payment Terms
+                    </label>
+                    <select
+                      class="form-control"
+                      v-model="settingsForm.paymentTerms"
+                    >
+                      <option value="Daily">Daily</option>
+                      <option value="Weekly">Weekly</option>
+                      <option value="Monthly">Monthly</option>
+                    </select>
+                    <small class="form-text text-muted"
+                      >Payment frequency</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="form-actions">
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-lg"
+                      :disabled="submitting"
+                    >
+                      <i
+                        v-if="!submitting"
+                        class="feather icon-check-circle mr-2"
+                      ></i>
+                      <span
+                        v-if="submitting"
+                        class="spinner-border spinner-border-sm mr-2"
+                      ></span>
+                      {{ submitting ? "Updating..." : "Update Settings" }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-lg ml-2"
+                      @click="resetSettingsForm"
+                      :disabled="submitting"
+                    >
+                      <i class="feather icon-refresh-ccw mr-2"></i>
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Business Information -->
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-header">
+            <h5>Business Information</h5>
+          </div>
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <strong>Company Code:</strong>
+              </div>
+              <div class="col-sm-8">
+                <span class="badge badge-info">{{
+                  operatorData?.companyCode || "N/A"
+                }}</span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <strong>Business Type:</strong>
+              </div>
+              <div class="col-sm-8">
+                {{ operatorData?.businessType || "N/A" }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <strong>Commission Rate:</strong>
+              </div>
+              <div class="col-sm-8">
+                {{
+                  dashboardStats?.commissionRate ||
+                  operatorData?.commissionRate ||
+                  settingsForm.commissionRate ||
+                  0
+                }}%
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <strong>Payment Terms:</strong>
+              </div>
+              <div class="col-sm-8">
+                {{
+                  dashboardStats?.paymentTerms ||
+                  operatorData?.paymentTerms ||
+                  settingsForm.paymentTerms ||
+                  "N/A"
+                }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <strong>License Expiry:</strong>
+              </div>
+              <div class="col-sm-8">
+                <span
+                  :class="
+                    getLicenseExpiryClass(operatorData?.licenseExpiryDate)
+                  "
                 >
-                  <div class="activity-icon">
-                    <i :class="getActivityIcon(activity.type)"></i>
-                  </div>
-                  <div class="activity-content">
-                    <h6>{{ activity.title }}</h6>
-                    <p class="text-muted">{{ activity.description }}</p>
-                    <small class="text-muted">{{
-                      formatDate(activity.createdAt)
-                    }}</small>
-                  </div>
+                  {{ formatDate(operatorData?.licenseExpiryDate) }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-header">
+            <h5>Contact Information</h5>
+          </div>
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <strong>Email:</strong>
+              </div>
+              <div class="col-sm-8">
+                <a :href="'mailto:' + operatorData?.email">{{
+                  operatorData?.email || "N/A"
+                }}</a>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <strong>Phone:</strong>
+              </div>
+              <div class="col-sm-8">
+                <a :href="'tel:' + operatorData?.phone">
+                  {{ operatorData?.countryCode || "+91" }}
+                  {{ operatorData?.phone || "N/A" }}
+                </a>
+              </div>
+            </div>
+            <div class="row mb-3" v-if="operatorData?.alternatePhone">
+              <div class="col-sm-4">
+                <strong>Alternate Phone:</strong>
+              </div>
+              <div class="col-sm-8">
+                <a :href="'tel:' + operatorData?.alternatePhone">
+                  {{ operatorData?.countryCode || "+91" }}
+                  {{ operatorData?.alternatePhone }}
+                </a>
+              </div>
+            </div>
+            <div class="row mb-3" v-if="operatorData?.website">
+              <div class="col-sm-4">
+                <strong>Website:</strong>
+              </div>
+              <div class="col-sm-8">
+                <a :href="operatorData?.website" target="_blank">{{
+                  operatorData?.website
+                }}</a>
+              </div>
+            </div>
+            <div class="row mb-3" v-if="operatorData?.contactPerson">
+              <div class="col-sm-4">
+                <strong>Contact Person:</strong>
+              </div>
+              <div class="col-sm-8">
+                {{ operatorData?.contactPerson?.name || "N/A" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row" v-if="recentActivity && recentActivity.length > 0">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h5>Recent Activity</h5>
+          </div>
+          <div class="card-body">
+            <div class="activity-timeline">
+              <div
+                v-for="(activity, index) in recentActivity"
+                :key="index"
+                class="activity-item"
+              >
+                <div class="activity-icon">
+                  <i :class="getActivityIcon(activity.type)"></i>
+                </div>
+                <div class="activity-content">
+                  <h6>{{ activity.title }}</h6>
+                  <p class="text-muted">{{ activity.description }}</p>
+                  <small class="text-muted">{{
+                    formatDate(activity.createdAt)
+                  }}</small>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
   </div>
 </template>
 
@@ -419,7 +444,7 @@ export default {
     async fetchDashboardData() {
       try {
         this.loading = true;
-        
+
         // First try to get dashboard data
         let dashboardResponse = null;
         try {
@@ -427,11 +452,18 @@ export default {
           dashboardResponse = await operatorService.getDashboard();
           console.log("Dashboard API response:", dashboardResponse);
         } catch (dashboardError) {
-          console.warn("Dashboard endpoint failed, will try profile endpoint:", dashboardError);
+          console.warn(
+            "Dashboard endpoint failed, will try profile endpoint:",
+            dashboardError
+          );
         }
 
         // If dashboard response is valid, use it
-        if (dashboardResponse && dashboardResponse.status && dashboardResponse.data) {
+        if (
+          dashboardResponse &&
+          dashboardResponse.status &&
+          dashboardResponse.data
+        ) {
           this.operatorData = dashboardResponse.data.operator || null;
           this.dashboardStats = dashboardResponse.data.stats || null;
           this.recentActivity = dashboardResponse.data.recentActivity || [];
@@ -444,35 +476,50 @@ export default {
           console.log("Fetching operator profile...");
           profileResponse = await operatorService.getProfile();
           console.log("Profile API response:", profileResponse);
-          
-          if (profileResponse && profileResponse.status && profileResponse.data) {
+
+          if (
+            profileResponse &&
+            profileResponse.status &&
+            profileResponse.data
+          ) {
             const profileData = profileResponse.data;
-            
+
             // If we don't have operator data from dashboard, use profile data
             if (!this.operatorData) {
               this.operatorData = profileData;
             }
-            
+
             // Extract operator ID from profile data
-            this.operatorId = profileData._id || profileData.id || this.operatorId;
-            
+            this.operatorId =
+              profileData._id || profileData.id || this.operatorId;
+
             // Merge profile data into operatorData if needed
             if (this.operatorData) {
               // Update operatorData with profile data to ensure we have latest values
               Object.assign(this.operatorData, {
-                maxNoOfSeats: profileData.maxNoOfSeats || this.operatorData.maxNoOfSeats,
-                maxFleetSize: profileData.maxFleetSize || this.operatorData.maxFleetSize,
-                commissionRate: profileData.commissionRate || this.operatorData.commissionRate,
-                paymentTerms: profileData.paymentTerms || this.operatorData.paymentTerms,
+                maxNoOfSeats:
+                  profileData.maxNoOfSeats || this.operatorData.maxNoOfSeats,
+                maxFleetSize:
+                  profileData.maxFleetSize || this.operatorData.maxFleetSize,
+                commissionRate:
+                  profileData.commissionRate ||
+                  this.operatorData.commissionRate,
+                paymentTerms:
+                  profileData.paymentTerms || this.operatorData.paymentTerms,
               });
             }
-          } else if (profileResponse && profileResponse.data && !profileResponse.status) {
+          } else if (
+            profileResponse &&
+            profileResponse.data &&
+            !profileResponse.status
+          ) {
             // Some APIs return data directly without status wrapper
             const profileData = profileResponse.data;
             if (!this.operatorData) {
               this.operatorData = profileData;
             }
-            this.operatorId = profileData._id || profileData.id || this.operatorId;
+            this.operatorId =
+              profileData._id || profileData.id || this.operatorId;
           }
         } catch (profileError) {
           console.error("Error fetching profile:", profileError);
@@ -495,17 +542,30 @@ export default {
         // Extract operator ID and populate settings form
         if (this.operatorData) {
           if (!this.operatorId) {
-            this.operatorId = this.operatorData._id || this.operatorData.id || null;
+            this.operatorId =
+              this.operatorData._id || this.operatorData.id || null;
           }
-          
+
           // Populate settings form from operator data
           this.settingsForm = {
-            maxNoOfSeats: this.operatorData.maxNoOfSeats || this.dashboardStats?.maxNoOfSeats || 50,
-            maxFleetSize: this.operatorData.maxFleetSize || this.dashboardStats?.maxFleetSize || 100,
-            commissionRate: this.operatorData.commissionRate || this.dashboardStats?.commissionRate || 0,
-            paymentTerms: this.operatorData.paymentTerms || this.dashboardStats?.paymentTerms || "Weekly",
+            maxNoOfSeats:
+              this.operatorData.maxNoOfSeats ||
+              this.dashboardStats?.maxNoOfSeats ||
+              50,
+            maxFleetSize:
+              this.operatorData.maxFleetSize ||
+              this.dashboardStats?.maxFleetSize ||
+              100,
+            commissionRate:
+              this.operatorData.commissionRate ||
+              this.dashboardStats?.commissionRate ||
+              0,
+            paymentTerms:
+              this.operatorData.paymentTerms ||
+              this.dashboardStats?.paymentTerms ||
+              "Weekly",
           };
-          
+
           // Store original settings for reset
           this.originalSettings = JSON.parse(JSON.stringify(this.settingsForm));
         }
@@ -524,12 +584,12 @@ export default {
             operator: this.operatorData,
             stats: this.dashboardStats,
             activity: this.recentActivity,
-            operatorId: this.operatorId
+            operatorId: this.operatorId,
           });
         }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-        
+
         // Check if it's an authentication error
         if (error?.response?.status === 401) {
           this.$toast.open({
@@ -543,7 +603,8 @@ export default {
           }, 2000);
         } else {
           this.$toast.open({
-            message: error?.response?.data?.message || "Failed to load dashboard data",
+            message:
+              error?.response?.data?.message || "Failed to load dashboard data",
             type: "error",
             position: "top-right",
             duration: 3000,
@@ -613,7 +674,7 @@ export default {
         }
 
         this.submitting = true;
-        
+
         // Prepare data for API
         const updateData = {
           maxNoOfSeats: this.settingsForm.maxNoOfSeats,
@@ -621,14 +682,22 @@ export default {
           commissionRate: this.settingsForm.commissionRate,
           paymentTerms: this.settingsForm.paymentTerms,
         };
-        
-        console.log("Updating settings with data:", updateData, "Operator ID:", this.operatorId);
-        
+
+        console.log(
+          "Updating settings with data:",
+          updateData,
+          "Operator ID:",
+          this.operatorId
+        );
+
         // Use operator ID to call PATCH /v1/operators/:operatorId
-        const response = await operatorService.updateProfile(updateData, this.operatorId);
-        
+        const response = await operatorService.updateProfile(
+          updateData,
+          this.operatorId
+        );
+
         console.log("Update response:", response);
-        
+
         if (response && response.status) {
           this.$toast.open({
             message: response.message || "Settings updated successfully",
@@ -636,16 +705,19 @@ export default {
             position: "top-right",
             duration: 3000,
           });
-          
+
           // Refresh dashboard data to get updated values
           this.loading = true;
           await this.fetchDashboardData();
-          
+
           // Update original settings
           this.originalSettings = JSON.parse(JSON.stringify(this.settingsForm));
         } else {
           this.$toast.open({
-            message: response?.message || response?.data?.message || "Failed to update settings",
+            message:
+              response?.message ||
+              response?.data?.message ||
+              "Failed to update settings",
             type: "error",
             position: "top-right",
             duration: 3000,
@@ -654,7 +726,9 @@ export default {
       } catch (error) {
         console.error("Error updating settings:", error);
         this.$toast.open({
-          message: error?.response?.data?.message || "An error occurred while updating settings",
+          message:
+            error?.response?.data?.message ||
+            "An error occurred while updating settings",
           type: "error",
           position: "top-right",
           duration: 3000,
@@ -1036,21 +1110,21 @@ export default {
   .settings-body {
     padding: 20px;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
-  
+
   .btn-lg {
     width: 100%;
     justify-content: center;
   }
-  
+
   .settings-header .d-flex {
     flex-direction: column;
     align-items: flex-start !important;
   }
-  
+
   .settings-icon {
     margin-bottom: 10px;
     margin-right: 0;

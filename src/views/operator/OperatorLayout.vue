@@ -2,15 +2,15 @@
   <div class="operator-layout">
     <!-- Operator Sidebar -->
     <OperatorSidebar />
-    
+
     <!-- Main Content Area -->
     <div class="main-content">
       <!-- Top Header -->
       <header class="operator-header">
         <div class="header-content">
           <div class="header-left">
-            <button 
-              class="sidebar-toggle" 
+            <button
+              class="sidebar-toggle"
               @click="toggleSidebar"
               v-if="isMobile"
             >
@@ -20,15 +20,20 @@
           </div>
           <div class="header-right">
             <div class="operator-info">
-              <span class="operator-name">{{ operatorData?.companyName || 'Operator' }}</span>
-              <span class="operator-status" :class="getStatusClass(operatorData?.status)">
-                {{ operatorData?.status || 'Unknown' }}
+              <span class="operator-name">{{
+                operatorData?.companyName || "Operator"
+              }}</span>
+              <span
+                class="operator-status"
+                :class="getStatusClass(operatorData?.status)"
+              >
+                {{ operatorData?.status || "Unknown" }}
               </span>
             </div>
           </div>
         </div>
       </header>
-      
+
       <!-- Page Content -->
       <main class="page-content">
         <router-view />
@@ -221,25 +226,25 @@ export default {
   .main-content {
     margin-left: 0;
   }
-  
+
   .operator-header {
     padding: 0 15px;
   }
-  
+
   .page-title {
     font-size: 20px;
   }
-  
+
   .operator-info {
     flex-direction: column;
     gap: 5px;
     align-items: flex-end;
   }
-  
+
   .operator-name {
     font-size: 14px;
   }
-  
+
   .operator-status {
     font-size: 10px;
     padding: 2px 8px;
@@ -252,7 +257,7 @@ export default {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
   }
-  
+
   .app-sidebar.sidebar-open {
     transform: translateX(0);
   }

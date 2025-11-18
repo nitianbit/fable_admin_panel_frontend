@@ -6,7 +6,7 @@ import TokenService from "../services/token.service";
 const useAuthapi = () => {
   const auth = useAuth();
   const refreshState = refreshAuth();
-  
+
   // Helper function to get access token
   const getAccessToken = () => {
     // Try to get from store first (for regular users)
@@ -19,12 +19,12 @@ const useAuthapi = () => {
       return token;
     }
     // Check if authToken is directly a string
-    if (typeof auth.authToken === 'string') {
+    if (typeof auth.authToken === "string") {
       return auth.authToken;
     }
     return null;
   };
-  
+
   authApi.interceptors.response.use(
     (response) => response,
     async (error) => {

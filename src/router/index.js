@@ -931,7 +931,14 @@ router.beforeEach(async (to, from, next) => {
   const userType = localStorage.getItem("userType");
   const userAccess = checkPermission(to.meta.permission);
   // console.log("Router guard - to:", to.path, "isAuthenticated:", isAuthenticated, "userType:", userType, "requiresAuth:", to.meta.requiresAuth);
-  let exceptionalRoutes = ["login", "forget", "change", "policy", "term", "operator-login"];
+  let exceptionalRoutes = [
+    "login",
+    "forget",
+    "change",
+    "policy",
+    "term",
+    "operator-login",
+  ];
 
   // Check if user is authenticated
   if (!isAuthenticated && to.meta.requiresAuth) {
@@ -945,20 +952,33 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // Handle operator routes - operators don't need complex permissions
-  if (userType === "operator" && to.meta.authorize && to.meta.authorize.includes("operator")) {
+  if (
+    userType === "operator" &&
+    to.meta.authorize &&
+    to.meta.authorize.includes("operator")
+  ) {
     // console.log("Operator route access granted");
     next();
     return;
   }
 
   // Prevent operators from accessing admin/staff routes
-  if (userType === "operator" && to.meta.authorize && !to.meta.authorize.includes("operator")) {
+  if (
+    userType === "operator" &&
+    to.meta.authorize &&
+    !to.meta.authorize.includes("operator")
+  ) {
     // console.log("Operator trying to access admin route, redirecting to operator dashboard");
     return next({ name: "operator-dashboard" });
   }
-  
+
   // Handle admin/staff routes - only check permissions for non-operator routes
-  if (userType !== "operator" && to.meta.permission && isAuthenticated && !userAccess) {
+  if (
+    userType !== "operator" &&
+    to.meta.permission &&
+    isAuthenticated &&
+    !userAccess
+  ) {
     // console.log("Permission denied for admin/staff route");
     return next("/403");
   }
@@ -970,7 +990,7 @@ router.beforeEach(async (to, from, next) => {
   if (isAuthenticated && to.path === "/auth/operator-login") {
     return next({ name: "operator-dashboard" });
   }
-  
+
   // Handle root path redirect based on user type
   if (isAuthenticated && to.path === "/") {
     if (userType === "operator") {
@@ -979,7 +999,7 @@ router.beforeEach(async (to, from, next) => {
       return next({ name: "dashboard" });
     }
   }
-  
+
   //  if (isAuthenticated && to.path === "/register") return { name: from.fullPath}
   next();
 });
@@ -1049,4 +1069,3 @@ router.afterEach(() => {
 // });
 
 export default router;
-

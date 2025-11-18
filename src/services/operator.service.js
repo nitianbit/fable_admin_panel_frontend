@@ -140,10 +140,16 @@ async function updateProfile(profileData, operatorId = null) {
     // If operatorId is provided, use the ID-based endpoint (PATCH /v1/operator/:operatorId)
     // Otherwise, use the profile endpoint (singular: operator/profile)
     if (operatorId) {
-      const response = await privateAuth.patch(`operators/profile`, profileData);
+      const response = await privateAuth.patch(
+        `operators/profile`,
+        profileData
+      );
       return response.data;
     } else {
-      const response = await privateAuth.patch("operators/profile", profileData);
+      const response = await privateAuth.patch(
+        "operators/profile",
+        profileData
+      );
       return response.data;
     }
   } catch (e) {

@@ -49,7 +49,11 @@
                     <i class="feather icon-trending-up"></i>
                   </div>
                   <div class="stat-content">
-                    <h3>{{ fleetStats.fleetSize || 0 }}/{{ fleetStats.maxFleetSize || 0 }}</h3>
+                    <h3>
+                      {{ fleetStats.fleetSize || 0 }}/{{
+                        fleetStats.maxFleetSize || 0
+                      }}
+                    </h3>
                     <p>Fleet Size</p>
                   </div>
                 </div>
@@ -66,9 +70,14 @@
               </div>
 
               <div v-else-if="buses.length === 0" class="text-center py-5">
-                <i class="feather icon-bus" style="font-size: 48px; color: #ccc;"></i>
+                <i
+                  class="feather icon-bus"
+                  style="font-size: 48px; color: #ccc"
+                ></i>
                 <h5 class="mt-3">No Buses Found</h5>
-                <p class="text-muted">You haven't added any buses to your fleet yet.</p>
+                <p class="text-muted">
+                  You haven't added any buses to your fleet yet.
+                </p>
                 <button class="btn btn-primary" @click="showAddBusModal = true">
                   <i class="feather icon-plus"></i> Add Your First Bus
                 </button>
@@ -87,7 +96,10 @@
                         :alt="bus.name"
                         class="img-fluid"
                       />
-                      <div class="bus-status" :class="getStatusClass(bus.status)">
+                      <div
+                        class="bus-status"
+                        :class="getStatusClass(bus.status)"
+                      >
                         {{ bus.status }}
                       </div>
                     </div>
@@ -101,7 +113,7 @@
                         </div>
                         <div class="detail-item">
                           <i class="feather icon-map-pin"></i>
-                          <span>{{ bus.route || 'No Route' }}</span>
+                          <span>{{ bus.route || "No Route" }}</span>
                         </div>
                       </div>
                       <div class="bus-actions">
@@ -126,10 +138,7 @@
 
             <!-- Add Bus Button -->
             <div v-if="buses.length > 0" class="text-center mt-4">
-              <button
-                class="btn btn-primary"
-                @click="showAddBusModal = true"
-              >
+              <button class="btn btn-primary" @click="showAddBusModal = true">
                 <i class="feather icon-plus"></i> Add New Bus
               </button>
             </div>
@@ -322,9 +331,14 @@ export default {
     async addBus() {
       try {
         this.submitting = true;
-        
+
         // Validate form
-        if (!this.busForm.name || !this.busForm.type || !this.busForm.seats || !this.busForm.registrationNumber) {
+        if (
+          !this.busForm.name ||
+          !this.busForm.type ||
+          !this.busForm.seats ||
+          !this.busForm.registrationNumber
+        ) {
           this.$toast.open({
             message: "Please fill in all required fields",
             type: "error",
@@ -343,19 +357,19 @@ export default {
           route: "No Route",
           image: "/default-bus.jpg",
         };
-        
+
         this.buses.push(newBus);
         this.fleetStats.totalBuses++;
         this.fleetStats.activeBuses++;
         this.fleetStats.fleetSize++;
-        
+
         this.$toast.open({
           message: "Bus added successfully",
           type: "success",
           position: "top-right",
           duration: 3000,
         });
-        
+
         this.showAddBusModal = false;
         this.resetBusForm();
       } catch (error) {

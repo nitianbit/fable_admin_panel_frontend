@@ -62,7 +62,11 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label>Status</label>
-                    <select class="form-control" v-model="filters.status" @change="filterBookings">
+                    <select
+                      class="form-control"
+                      v-model="filters.status"
+                      @change="filterBookings"
+                    >
                       <option value="">All Status</option>
                       <option value="confirmed">Confirmed</option>
                       <option value="pending">Pending</option>
@@ -97,7 +101,10 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label>&nbsp;</label>
-                    <button class="btn btn-outline-secondary btn-block" @click="resetFilters">
+                    <button
+                      class="btn btn-outline-secondary btn-block"
+                      @click="resetFilters"
+                    >
                       <i class="feather icon-refresh-cw"></i> Reset
                     </button>
                   </div>
@@ -114,10 +121,18 @@
                 <p class="mt-3">Loading bookings...</p>
               </div>
 
-              <div v-else-if="filteredBookings.length === 0" class="text-center py-5">
-                <i class="feather icon-calendar" style="font-size: 48px; color: #ccc;"></i>
+              <div
+                v-else-if="filteredBookings.length === 0"
+                class="text-center py-5"
+              >
+                <i
+                  class="feather icon-calendar"
+                  style="font-size: 48px; color: #ccc"
+                ></i>
                 <h5 class="mt-3">No Bookings Found</h5>
-                <p class="text-muted">No bookings match your current filters.</p>
+                <p class="text-muted">
+                  No bookings match your current filters.
+                </p>
               </div>
 
               <div v-else class="table-responsive">
@@ -143,39 +158,52 @@
                       <td>
                         <div class="customer-info">
                           <strong>{{ booking.customerName }}</strong>
-                          <br>
-                          <small class="text-muted">{{ booking.customerPhone }}</small>
+                          <br />
+                          <small class="text-muted">{{
+                            booking.customerPhone
+                          }}</small>
                         </div>
                       </td>
                       <td>
                         <div class="route-info">
                           <strong>{{ booking.from }} → {{ booking.to }}</strong>
-                          <br>
-                          <small class="text-muted">{{ booking.duration }}</small>
+                          <br />
+                          <small class="text-muted">{{
+                            booking.duration
+                          }}</small>
                         </div>
                       </td>
                       <td>
                         <div class="bus-info">
                           <strong>{{ booking.busName }}</strong>
-                          <br>
-                          <small class="text-muted">{{ booking.busType }}</small>
+                          <br />
+                          <small class="text-muted">{{
+                            booking.busType
+                          }}</small>
                         </div>
                       </td>
                       <td>
                         <div class="datetime-info">
                           <strong>{{ formatDate(booking.travelDate) }}</strong>
-                          <br>
-                          <small class="text-muted">{{ booking.departureTime }}</small>
+                          <br />
+                          <small class="text-muted">{{
+                            booking.departureTime
+                          }}</small>
                         </div>
                       </td>
                       <td>
-                        <span class="seats-info">{{ booking.seats.join(', ') }}</span>
+                        <span class="seats-info">{{
+                          booking.seats.join(", ")
+                        }}</span>
                       </td>
                       <td>
                         <span class="amount">₹{{ booking.totalAmount }}</span>
                       </td>
                       <td>
-                        <span class="status-badge" :class="getStatusClass(booking.status)">
+                        <span
+                          class="status-badge"
+                          :class="getStatusClass(booking.status)"
+                        >
                           {{ booking.status }}
                         </span>
                       </td>
@@ -213,11 +241,20 @@
             </div>
 
             <!-- Pagination -->
-            <div v-if="filteredBookings.length > 0" class="pagination-section mt-4">
+            <div
+              v-if="filteredBookings.length > 0"
+              class="pagination-section mt-4"
+            >
               <nav aria-label="Bookings pagination">
                 <ul class="pagination justify-content-center">
-                  <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                    <button class="page-link" @click="changePage(currentPage - 1)">
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === 1 }"
+                  >
+                    <button
+                      class="page-link"
+                      @click="changePage(currentPage - 1)"
+                    >
                       Previous
                     </button>
                   </li>
@@ -231,8 +268,14 @@
                       {{ page }}
                     </button>
                   </li>
-                  <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                    <button class="page-link" @click="changePage(currentPage + 1)">
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === totalPages }"
+                  >
+                    <button
+                      class="page-link"
+                      @click="changePage(currentPage + 1)"
+                    >
                       Next
                     </button>
                   </li>
@@ -349,25 +392,27 @@ export default {
 
       // Filter by status
       if (this.filters.status) {
-        filtered = filtered.filter(booking => 
-          booking.status.toLowerCase() === this.filters.status.toLowerCase()
+        filtered = filtered.filter(
+          (booking) =>
+            booking.status.toLowerCase() === this.filters.status.toLowerCase()
         );
       }
 
       // Filter by date
       if (this.filters.date) {
-        filtered = filtered.filter(booking => 
-          booking.travelDate === this.filters.date
+        filtered = filtered.filter(
+          (booking) => booking.travelDate === this.filters.date
         );
       }
 
       // Filter by search term
       if (this.filters.search) {
         const searchTerm = this.filters.search.toLowerCase();
-        filtered = filtered.filter(booking => 
-          booking.id.toLowerCase().includes(searchTerm) ||
-          booking.customerName.toLowerCase().includes(searchTerm) ||
-          booking.customerPhone.includes(searchTerm)
+        filtered = filtered.filter(
+          (booking) =>
+            booking.id.toLowerCase().includes(searchTerm) ||
+            booking.customerName.toLowerCase().includes(searchTerm) ||
+            booking.customerPhone.includes(searchTerm)
         );
       }
 
@@ -386,7 +431,9 @@ export default {
       this.calculatePagination();
     },
     calculatePagination() {
-      this.totalPages = Math.ceil(this.filteredBookings.length / this.itemsPerPage);
+      this.totalPages = Math.ceil(
+        this.filteredBookings.length / this.itemsPerPage
+      );
     },
     changePage(page) {
       if (page >= 1 && page <= this.totalPages) {
@@ -420,7 +467,7 @@ export default {
         booking.status = "confirmed";
         this.bookingStats.confirmedBookings++;
         this.bookingStats.pendingBookings--;
-        
+
         this.$toast.open({
           message: "Booking confirmed successfully",
           type: "success",
@@ -443,7 +490,7 @@ export default {
           // This would be an API call to cancel the booking
           booking.status = "cancelled";
           this.bookingStats.confirmedBookings--;
-          
+
           this.$toast.open({
             message: "Booking cancelled successfully",
             type: "success",

@@ -13,7 +13,7 @@
                 <!-- Company Information -->
                 <div class="col-md-6">
                   <h6 class="section-title">Company Information</h6>
-                  
+
                   <div class="form-group">
                     <label>Company Name *</label>
                     <input
@@ -23,7 +23,9 @@
                       readonly
                       disabled
                     />
-                    <small class="form-text text-muted">Company name cannot be changed</small>
+                    <small class="form-text text-muted"
+                      >Company name cannot be changed</small
+                    >
                   </div>
 
                   <div class="form-group">
@@ -35,18 +37,26 @@
                       readonly
                       disabled
                     />
-                    <small class="form-text text-muted">Company code cannot be changed</small>
+                    <small class="form-text text-muted"
+                      >Company code cannot be changed</small
+                    >
                   </div>
 
                   <div class="form-group">
                     <label>Business Type *</label>
-                    <select class="form-control" v-model="form.businessType" disabled>
+                    <select
+                      class="form-control"
+                      v-model="form.businessType"
+                      disabled
+                    >
                       <option value="Private">Private</option>
                       <option value="Government">Government</option>
                       <option value="Semi-Government">Semi-Government</option>
                       <option value="Cooperative">Cooperative</option>
                     </select>
-                    <small class="form-text text-muted">Business type cannot be changed</small>
+                    <small class="form-text text-muted"
+                      >Business type cannot be changed</small
+                    >
                   </div>
 
                   <div class="form-group">
@@ -58,14 +68,16 @@
                       readonly
                       disabled
                     />
-                    <small class="form-text text-muted">Email cannot be changed</small>
+                    <small class="form-text text-muted"
+                      >Email cannot be changed</small
+                    >
                   </div>
                 </div>
 
                 <!-- Contact Information -->
                 <div class="col-md-6">
                   <h6 class="section-title">Contact Information</h6>
-                  
+
                   <div class="form-group">
                     <label>Phone Number *</label>
                     <input
@@ -102,7 +114,7 @@
                 <!-- Address Information -->
                 <div class="col-md-6">
                   <h6 class="section-title">Address Information</h6>
-                  
+
                   <div class="form-group">
                     <label>Street Address</label>
                     <input
@@ -143,7 +155,7 @@
                 <!-- Contact Person Information -->
                 <div class="col-md-6">
                   <h6 class="section-title">Contact Person Information</h6>
-                  
+
                   <div class="form-group">
                     <label>Contact Person Name *</label>
                     <input
@@ -189,7 +201,7 @@
                 <!-- Fleet and Business Settings -->
                 <div class="col-md-6">
                   <h6 class="section-title">Fleet and Business Settings</h6>
-                  
+
                   <div class="form-group">
                     <label>Max Number of Seats *</label>
                     <input
@@ -200,7 +212,9 @@
                       max="100"
                       required
                     />
-                    <small class="form-text text-muted">Maximum number of seats per bus (1-100)</small>
+                    <small class="form-text text-muted"
+                      >Maximum number of seats per bus (1-100)</small
+                    >
                   </div>
 
                   <div class="form-group">
@@ -211,7 +225,9 @@
                       v-model.number="form.maxFleetSize"
                       min="1"
                     />
-                    <small class="form-text text-muted">Maximum number of buses in fleet</small>
+                    <small class="form-text text-muted"
+                      >Maximum number of buses in fleet</small
+                    >
                   </div>
 
                   <div class="form-group">
@@ -224,7 +240,9 @@
                       max="100"
                       step="0.01"
                     />
-                    <small class="form-text text-muted">Commission rate (0-100)</small>
+                    <small class="form-text text-muted"
+                      >Commission rate (0-100)</small
+                    >
                   </div>
 
                   <div class="form-group">
@@ -240,7 +258,7 @@
                 <!-- Additional Information -->
                 <div class="col-md-6">
                   <h6 class="section-title">Additional Information</h6>
-                  
+
                   <div class="form-group">
                     <label>Description</label>
                     <textarea
@@ -267,7 +285,7 @@
                 <!-- Social Media -->
                 <div class="col-md-6">
                   <h6 class="section-title">Social Media</h6>
-                  
+
                   <div class="form-group">
                     <label>Facebook</label>
                     <input
@@ -406,11 +424,11 @@ export default {
       try {
         this.loading = true;
         const response = await operatorService.getProfile();
-        
+
         if (response && response.data) {
           // Store operator ID for update requests
           this.operatorId = response.data._id || response.data.id || null;
-          
+
           this.form = {
             companyName: response.data.companyName || "",
             companyCode: response.data.companyCode || "",
@@ -445,7 +463,7 @@ export default {
             commissionRate: response.data.commissionRate || 0,
             paymentTerms: response.data.paymentTerms || "Weekly",
           };
-          
+
           // Store original form for reset functionality
           this.originalForm = JSON.parse(JSON.stringify(this.form));
         }
@@ -464,7 +482,7 @@ export default {
     async handleSubmit() {
       try {
         this.submitting = true;
-        
+
         // Prepare data for API - include all updatable fields
         const updateData = {
           phone: this.form.phone,
@@ -479,11 +497,14 @@ export default {
           commissionRate: this.form.commissionRate,
           paymentTerms: this.form.paymentTerms,
         };
-        
+
         // Use operator ID if available to call PATCH /v1/operator/:operatorId
         // Otherwise fall back to profile endpoint
-        const response = await operatorService.updateProfile(updateData, this.operatorId);
-        
+        const response = await operatorService.updateProfile(
+          updateData,
+          this.operatorId
+        );
+
         if (response && response.status) {
           this.$toast.open({
             message: response.message || "Profile updated successfully",
@@ -491,7 +512,7 @@ export default {
             position: "top-right",
             duration: 3000,
           });
-          
+
           // Update original form
           this.originalForm = JSON.parse(JSON.stringify(this.form));
         } else {

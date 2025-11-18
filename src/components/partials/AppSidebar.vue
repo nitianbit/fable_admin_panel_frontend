@@ -1,7 +1,7 @@
 <template lang="html">
   <section class="app-sidebar">
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
-      <ul class="nav">
+      <ul class="nav" v-if="!isOperator">
         <li class="nav-item nav-profile">
           <a href="#/my-profile" class="nav-link">
             <div class="profile-image">
@@ -684,6 +684,162 @@
           </b-collapse>
         </li>
       </ul>
+      <ul v-if="isOperator" class="nav">
+        <li class="nav-item nav-profile">
+          <router-link to="/operator/profile" class="nav-link">
+            <div class="profile-image">
+              <img
+                class="img-xs rounded-circle"
+                :src="operatorData?.documents?.logo || '/default-operator.png'"
+                alt="operator logo"
+              />
+              <div class="dot-indicator bg-success"></div>
+            </div>
+            <div class="text-wrapper">
+              <div class="profile-name">
+                {{ operatorData?.companyName || "Operator" }}
+              </div>
+              <div class="designation">
+                {{ operatorData?.contactPerson?.name || "Contact Person" }}
+              </div>
+            </div>
+          </router-link>
+        </li>
+        <li class="nav-item nav-category">Operator Menu</li>
+        <li class="nav-item">
+          <router-link class="nav-link" :to="{ name: 'operator-dashboard' }">
+            <i class="menu-icon typcn typcn-home-outline typcn-3x"></i>
+            <span class="menu-title">Console</span>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" v-b-toggle="'ui-basic'">
+            <i class="menu-icon typcn typcn-coffee"></i>
+            <span class="menu-title">Manage Vehicles</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <b-collapse id="ui-basic">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/buses',
+                  }"
+                  >All Buses</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/bus/create',
+                  }"
+                  >Create Bus</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/buslayouts',
+                  }"
+                  >All Bus Layout</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/buslayout/create',
+                  }"
+                  >Add Bus Layout
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/bustypes',
+                  }"
+                  >All Bus Type</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/bustype/create',
+                  }"
+                  >Add Bus Type
+                </router-link>
+              </li>
+            </ul>
+          </b-collapse>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" v-b-toggle="'bookings'">
+            <i class="menu-icon typcn typcn-user-outline"></i>
+            <span class="menu-title">Manage Bookings</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <b-collapse id="bookings">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/bookings/scheduled',
+                  }"
+                  >Scheduled</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/bookings/onboarded',
+                  }"
+                  >Onboarded</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/bookings/completed',
+                  }"
+                  >Completed</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/bookings/cancelled',
+                  }"
+                  >Cancelled</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link"
+                  :to="{
+                    path: '/bookings/expired',
+                  }"
+                  >Expired</router-link
+                >
+              </li>
+            </ul>
+          </b-collapse>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" @click="logout">
+            <i class="menu-icon typcn typcn-power"></i>
+            <span class="menu-title">Logout</span>
+          </a>
+        </li>
+      </ul>
     </nav>
   </section>
 </template>
@@ -691,6 +847,7 @@
 <script lang="js">
 
 import JQuery from 'jquery'
+import TokenService from "../../services/token.service";
 // import _ from 'lodash';
 import  { mapState } from "pinia";
 import { useAuth } from "../../store/useAuth.js";
@@ -700,12 +857,23 @@ import { fetchUsers } from "../../store/fetchUsers.js";
 let $ = JQuery
 export default {
   name: 'the-ferri-sidebar',
+  data() {
+    return {
+      operatorData: null,
+    };
+  },
   computed:{
     ...mapState(fetchUsers,['getUser']),
     ...mapState(fetchUsers,['getName']),
-    ...mapState(useAuth,['isAuth'])
+    ...mapState(useAuth,['isAuth']),
+    isOperator() {
+      return localStorage.getItem("userType") === "operator";
+    }
   },
-  mounted () {
+  mounted() {
+    if (this.isOperator) {
+      this.loadOperatorData();
+    }
     const body = document.querySelector('body')
     // add class 'hover-open' to sidebar navitem while hover in sidebar-icon-only menu
     document.querySelectorAll('.sidebar .nav-item').forEach(function (el) {
@@ -720,11 +888,31 @@ export default {
         }
       })
     })
+  },
+  methods: {
+    loadOperatorData() {
+      // Load operator data from localStorage or API
+      const storedData = localStorage.getItem("operatorData");
+      if (storedData) {
+        this.operatorData = JSON.parse(storedData);
+      }
+    },
+    logout() {
+      // Clear all operator authentication data
+      TokenService.removeUser();
+      TokenService.removeRole();
+      TokenService.removeAccessToken();
+      TokenService.removeRefreshToken();
+      localStorage.removeItem("userType");
+      localStorage.removeItem("operatorData");
+
+      // Clear Pinia store
+      const auth = useAuth();
+      auth.$reset();
+
+      // Redirect to operator login
+      this.$router.push("/auth/operator-login");
+    },
   }
 }
 </script>
-
-<style scoped lang="scss">
-.app-sidebar {
-}
-</style>

@@ -16,6 +16,7 @@ import { ColorPicker, ColorPanel } from "one-colorpicker";
 import VueLazyload from "vue-lazyload";
 import VueCountryDropdown from "vue-country-dropdown";
 import { useApp } from "./store/useApp";
+import TokenService from "./services/token.service";
 
 // eslint-disable-next-line
 let $ = JQuery
@@ -47,6 +48,11 @@ Vue.use(ColorPicker);
 //add router to pinia
 Vue.use(PiniaVuePlugin);
 Vue.use(pinia);
+
+// Set userType if role is operator
+if (TokenService.getRole() === "operator") {
+  localStorage.setItem("userType", "operator");
+}
 
 Vue.use(VueRouter);
 

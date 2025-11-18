@@ -66,10 +66,16 @@
               </div>
 
               <div v-else-if="routes.length === 0" class="text-center py-5">
-                <i class="feather icon-map" style="font-size: 48px; color: #ccc;"></i>
+                <i
+                  class="feather icon-map"
+                  style="font-size: 48px; color: #ccc"
+                ></i>
                 <h5 class="mt-3">No Routes Found</h5>
                 <p class="text-muted">You haven't created any routes yet.</p>
-                <button class="btn btn-primary" @click="showAddRouteModal = true">
+                <button
+                  class="btn btn-primary"
+                  @click="showAddRouteModal = true"
+                >
                   <i class="feather icon-plus"></i> Create Your First Route
                 </button>
               </div>
@@ -83,7 +89,10 @@
                   <div class="route-card">
                     <div class="route-header">
                       <h6 class="route-name">{{ route.name }}</h6>
-                      <span class="route-status" :class="getStatusClass(route.status)">
+                      <span
+                        class="route-status"
+                        :class="getStatusClass(route.status)"
+                      >
                         {{ route.status }}
                       </span>
                     </div>
@@ -137,10 +146,7 @@
 
             <!-- Add Route Button -->
             <div v-if="routes.length > 0" class="text-center mt-4">
-              <button
-                class="btn btn-primary"
-                @click="showAddRouteModal = true"
-              >
+              <button class="btn btn-primary" @click="showAddRouteModal = true">
                 <i class="feather icon-plus"></i> Create New Route
               </button>
             </div>
@@ -363,9 +369,16 @@ export default {
     async addRoute() {
       try {
         this.submitting = true;
-        
+
         // Validate form
-        if (!this.routeForm.name || !this.routeForm.status || !this.routeForm.from || !this.routeForm.to || !this.routeForm.duration || !this.routeForm.fare) {
+        if (
+          !this.routeForm.name ||
+          !this.routeForm.status ||
+          !this.routeForm.from ||
+          !this.routeForm.to ||
+          !this.routeForm.duration ||
+          !this.routeForm.fare
+        ) {
           this.$toast.open({
             message: "Please fill in all required fields",
             type: "error",
@@ -382,20 +395,20 @@ export default {
           ...this.routeForm,
           buses: 1,
         };
-        
+
         this.routes.push(newRoute);
         this.routeStats.totalRoutes++;
         if (newRoute.status === "Active") {
           this.routeStats.activeRoutes++;
         }
-        
+
         this.$toast.open({
           message: "Route created successfully",
           type: "success",
           position: "top-right",
           duration: 3000,
         });
-        
+
         this.showAddRouteModal = false;
         this.resetRouteForm();
       } catch (error) {

@@ -22,21 +22,25 @@
                     type="text"
                     placeholder="Enter name"
                     :class="{
-                      'is-invalid': submitted || $v.form.name.$error,
+                      'is-invalid': $v.form.name.$dirty && $v.form.name.$invalid,
                     }"
                     :state="validateState('name')"
                     @blur="$v.form.name.$touch()"
                   ></b-form-input>
-                  <b-form-invalid-feedback v-if="!$v.form.name.required">
+                  <b-form-invalid-feedback
+                    v-if="$v.form.name.$dirty && !$v.form.name.required"
+                  >
                     name is required
                   </b-form-invalid-feedback>
                   <b-form-invalid-feedback
-                    v-if="!$v.form.name.alphaNumSpace"
+                    v-if="$v.form.name.$dirty && !$v.form.name.alphaNumSpace"
                     id="input-1-live-feedback"
                     >Only alphanumerics characters with space are
                     allowed</b-form-invalid-feedback
                   >
-                  <b-form-invalid-feedback v-if="!$v.form.name.uniqueName">
+                  <b-form-invalid-feedback
+                    v-if="$v.form.name.$dirty && !$v.form.name.uniqueName"
+                  >
                     Bus name is already registered.
                   </b-form-invalid-feedback>
                 </b-form-group>
@@ -54,34 +58,41 @@
                     type="text"
                     placeholder="Enter plate/registration number"
                     :class="{
-                      'is-invalid': submitted || $v.form.reg_no.$error,
+                      'is-invalid':
+                        $v.form.reg_no.$dirty && $v.form.reg_no.$invalid,
                     }"
                     :state="validateState('reg_no')"
                     @blur="$v.form.reg_no.$touch()"
                   ></b-form-input>
                   <b-form-invalid-feedback
-                    v-if="submitted || !$v.form.reg_no.required"
+                    v-if="$v.form.reg_no.$dirty && !$v.form.reg_no.required"
                     class="invalid-feedback"
                   >
                     plate/registration number is required
                   </b-form-invalid-feedback>
 
-                  <b-form-invalid-feedback v-if="!$v.form.reg_no.minLength">
+                  <b-form-invalid-feedback
+                    v-if="$v.form.reg_no.$dirty && !$v.form.reg_no.minLength"
+                  >
                     Plate/registration number must hav at min
                     {{ $v.form.reg_no.$params.minLength.min }} letters.
                   </b-form-invalid-feedback>
-                  <b-form-invalid-feedback v-if="!$v.form.reg_no.maxLength">
+                  <b-form-invalid-feedback
+                    v-if="$v.form.reg_no.$dirty && !$v.form.reg_no.maxLength"
+                  >
                     Plate/registration number must have at max
                     {{ $v.form.reg_no.$params.maxLength.max }} letters.
                   </b-form-invalid-feedback>
 
                   <b-form-invalid-feedback
-                    v-if="!$v.form.name.alphaNumSpace"
+                    v-if="$v.form.reg_no.$dirty && !$v.form.reg_no.alphaNumSpace"
                     id="input-1-live-feedback"
                     >Only alphanumerics characters with space are
                     allowed</b-form-invalid-feedback
                   >
-                  <b-form-invalid-feedback v-if="!$v.form.reg_no.uniqueRegNo">
+                  <b-form-invalid-feedback
+                    v-if="$v.form.reg_no.$dirty && !$v.form.reg_no.uniqueRegNo"
+                  >
                     This plate/registration number is already registered.
                   </b-form-invalid-feedback>
                 </b-form-group>
@@ -100,23 +111,26 @@
                     type="text"
                     placeholder="Enter model no."
                     :class="{
-                      'is-invalid': submitted || $v.form.model_no.$error,
+                      'is-invalid':
+                        $v.form.model_no.$dirty && $v.form.model_no.$invalid,
                     }"
                     :state="validateState('model_no')"
                     @blur="$v.form.model_no.$touch()"
                   ></b-form-input>
                   <b-form-invalid-feedback
-                    v-if="submitted || !$v.form.model_no.required"
+                    v-if="$v.form.model_no.$dirty && !$v.form.model_no.required"
                   >
                     model no is required
                   </b-form-invalid-feedback>
                   <b-form-invalid-feedback
-                    v-if="!$v.form.model_no.alphaNum"
+                    v-if="$v.form.model_no.$dirty && !$v.form.model_no.alphaNum"
                     id="input-1-live-feedback"
                     >Only alphanumerics characters are
                     allowed</b-form-invalid-feedback
                   >
-                  <b-form-invalid-feedback v-if="!$v.form.reg_no.uniqueModelNo">
+                  <b-form-invalid-feedback
+                    v-if="$v.form.model_no.$dirty && !$v.form.model_no.uniqueModelNo"
+                  >
                     This Model number is already registered.
                   </b-form-invalid-feedback>
                 </b-form-group>
@@ -135,26 +149,27 @@
                     type="text"
                     placeholder="Enter chassis no."
                     :class="{
-                      'is-invalid': submitted || $v.form.chassis_no.$error,
+                      'is-invalid':
+                        $v.form.chassis_no.$dirty && $v.form.chassis_no.$invalid,
                     }"
                     :state="validateState('chassis_no')"
                     @blur="$v.form.chassis_no.$touch()"
                   ></b-form-input>
                   <b-form-invalid-feedback
-                    v-if="submitted || !$v.form.chassis_no.required"
+                    v-if="$v.form.chassis_no.$dirty && !$v.form.chassis_no.required"
                   >
                     chassis no is required
                   </b-form-invalid-feedback>
 
                   <b-form-invalid-feedback
-                    v-if="!$v.form.chassis_no.alphaNum"
+                    v-if="$v.form.chassis_no.$dirty && !$v.form.chassis_no.alphaNum"
                     id="input-1-live-feedback"
                     >Only alphanumerics characters are
                     allowed</b-form-invalid-feedback
                   >
 
                   <b-form-invalid-feedback
-                    v-if="$v.form.reg_no.uniqueChassisNo"
+                    v-if="$v.form.chassis_no.$dirty && !$v.form.chassis_no.uniqueChassisNo"
                   >
                     This chassis number is already registered.
                   </b-form-invalid-feedback>
@@ -174,18 +189,18 @@
                     type="text"
                     placeholder="Enter brand name."
                     :class="{
-                      'is-invalid': submitted || $v.form.brand.$error,
+                      'is-invalid': $v.form.brand.$dirty && $v.form.brand.$invalid,
                     }"
                     :state="validateState('brand')"
                   ></b-form-input>
                   <b-form-invalid-feedback
-                    v-if="submitted || !$v.form.brand.required"
+                    v-if="$v.form.brand.$dirty && !$v.form.brand.required"
                     class="invalid-feedback"
                   >
                     brand no is required
                   </b-form-invalid-feedback>
                   <b-form-invalid-feedback
-                    v-if="!$v.form.brand.alphaNum"
+                    v-if="$v.form.brand.$dirty && !$v.form.brand.alphaNum"
                     id="input-1-live-feedback"
                     >Only alphanumerics characters are
                     allowed</b-form-invalid-feedback
@@ -204,12 +219,14 @@
                     :options="amenitieslists"
                     v-model.trim="$v.form.amenities.$model"
                     :class="{
-                      'is-invalid': submitted || $v.form.amenities.$error,
+                      'is-invalid':
+                        $v.form.amenities.$dirty && $v.form.amenities.$invalid,
                     }"
                     :state="validateState('amenities')"
                     multiple
                   ></b-form-select>
                   <b-form-invalid-feedback
+                    v-if="$v.form.amenities.$dirty && !$v.form.amenities.required"
                     >Amenities is a required field.</b-form-invalid-feedback
                   >
                 </b-form-group>
@@ -226,7 +243,8 @@
                     v-model.trim="$v.form.bustypeId.$model"
                     :options="bustypes"
                     :class="{
-                      'is-invalid': submitted || $v.form.bustypeId.$error,
+                      'is-invalid':
+                        $v.form.bustypeId.$dirty && $v.form.bustypeId.$invalid,
                     }"
                     :state="validateState('bustypeId')"
                   >
@@ -237,7 +255,7 @@
                     </template>
                   </b-form-select>
                   <b-form-invalid-feedback
-                    v-if="submitted || !$v.form.bustypeId.required"
+                    v-if="$v.form.bustypeId.$dirty && !$v.form.bustypeId.required"
                   >
                     bus type is required
                   </b-form-invalid-feedback>
@@ -255,7 +273,8 @@
                     v-model.trim="$v.form.buslayoutId.$model"
                     :options="buslayouts"
                     :class="{
-                      'is-invalid': submitted || $v.form.buslayoutId.$error,
+                      'is-invalid':
+                        $v.form.buslayoutId.$dirty && $v.form.buslayoutId.$invalid,
                     }"
                     :state="validateState('buslayoutId')"
                   >
@@ -266,7 +285,7 @@
                     </template>
                   </b-form-select>
                   <b-form-invalid-feedback
-                    v-if="submitted || !$v.form.buslayoutId.required"
+                    v-if="$v.form.buslayoutId.$dirty && !$v.form.buslayoutId.required"
                     class="invalid-feedback"
                   >
                     bus layout is required
@@ -287,13 +306,14 @@
                     name="status"
                     v-model.trim="$v.form.status.$model"
                     :class="{
-                      'is-invalid': submitted || $v.form.status.$error,
+                      'is-invalid':
+                        $v.form.status.$dirty && $v.form.status.$invalid,
                     }"
                     :state="validateState('status')"
                   ></b-form-radio-group>
 
                   <b-form-invalid-feedback
-                    v-if="submitted || !$v.form.status.required"
+                    v-if="$v.form.status.$dirty && !$v.form.status.required"
                     >Please select one</b-form-invalid-feedback
                   >
                 </b-form-group>
@@ -710,6 +730,16 @@ export default {
     removeImage: function (titlename) {
       this.form[titlename] = "";
     },
+    sanitizeSubmissionPayload() {
+      const payload = { ...this.form };
+      if (!payload.adminId) {
+        delete payload.adminId;
+      }
+      if (!payload.operatorId) {
+        delete payload.operatorId;
+      }
+      return payload;
+    },
     async getbus() {
       try {
         const response = await busService.find(this.$route.params.id);
@@ -743,9 +773,10 @@ export default {
           return;
         }
 
+        const payload = this.sanitizeSubmissionPayload();
         const response = await busService.update(
           this.$route.params.id,
-          this.form
+          payload
         );
         if (response.status) {
           this.submitted = false;

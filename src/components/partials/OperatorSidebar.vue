@@ -13,8 +13,9 @@
               <div class="dot-indicator bg-success"></div>
             </div>
             <div class="text-wrapper">
-              <div class="profile-name">{{ operatorData?.companyName || 'Operator' }}</div>
-              <div class="designation">{{ operatorData?.contactPerson?.name || 'Contact Person' }}</div>
+              <div class="profile-name">
+                {{ operatorData?.companyName || "Operator" }}
+              </div>
             </div>
           </router-link>
         </li>
@@ -187,11 +188,11 @@ export default {
       TokenService.removeRefreshToken();
       localStorage.removeItem("userType");
       localStorage.removeItem("operatorData");
-      
+
       // Clear Pinia store
       const auth = useAuth();
       auth.$reset();
-      
+
       // Redirect to operator login
       this.$router.push("/auth/operator-login");
     },
