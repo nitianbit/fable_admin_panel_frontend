@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { authApi } from "../helpers/auth";
 import { authService } from "../services";
 import { fetchUsers } from "./fetchUsers";
+import TokenService from "../services/token.service";
 
 import jwtDecode from "jwt-decode";
 export const useAuth = defineStore("userAuth", {
@@ -75,6 +76,16 @@ export const useAuth = defineStore("userAuth", {
       try {
         const getUser = fetchUsers();
         // const response = await baseURL.post("/logout");
+        
+        // Clear all authentication tokens and user data
+        TokenService.removeAccessToken();
+        TokenService.removeRefreshToken();
+        TokenService.removeUser();
+        TokenService.removeRole();
+        
+        localStorage.clear();
+        
+        // Reset Pinia stores
         getUser.$reset();
         this.$reset();
         this.$router.replace({ path: "/auth/login" });

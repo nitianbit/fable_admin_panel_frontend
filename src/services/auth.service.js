@@ -89,6 +89,8 @@ function logout() {
   TokenService.removeRefreshToken();
   TokenService.removeUser();
   TokenService.removeRole();
+  // Clear all localStorage items
+  localStorage.clear();
 }
 
 async function register(user) {
