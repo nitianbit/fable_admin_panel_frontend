@@ -80,7 +80,7 @@ const routes = [
         component: () => import("../views/admin/buses"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "bus.view"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
@@ -92,7 +92,7 @@ const routes = [
         component: () => import("../views/admin/buses/create"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "bus.create"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
@@ -104,7 +104,7 @@ const routes = [
         component: () => import("../views/admin/buses/edit"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "bus.view"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
@@ -117,7 +117,7 @@ const routes = [
         component: () => import("../views/admin/bustypes"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "bus.type.view"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
@@ -129,7 +129,7 @@ const routes = [
         component: () => import("../views/admin/bustypes/create"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "bus.type.create"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
@@ -141,7 +141,7 @@ const routes = [
         component: () => import("../views/admin/bustypes/edit"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "bus.type.edit"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
@@ -322,7 +322,7 @@ const routes = [
         component: () => import("../views/admin/buslayout"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "bus.layout.view"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
@@ -334,7 +334,7 @@ const routes = [
         component: () => import("../views/admin/buslayout/create"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "bus.layout.create"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
@@ -346,7 +346,7 @@ const routes = [
         component: () => import("../views/admin/buslayout/edit"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "bus.layout.edit"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
@@ -623,7 +623,7 @@ const routes = [
         component: () => import("../views/admin/bookings"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "booking.view"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
@@ -635,7 +635,7 @@ const routes = [
         component: () => import("../views/admin/bookings/detail"),
         meta: {
           requiresAuth: true,
-          authorize: ["admin", "staff"],
+          authorize: ["admin", "staff", "operator"],
           permission: ["master.admin", "booking.edit"],
           redirect: { name: "login" },
           forbiddenRedirect: "/403",
